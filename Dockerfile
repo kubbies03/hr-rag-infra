@@ -16,7 +16,7 @@ RUN pip install --upgrade pip \
 
 COPY app ./app
 COPY scripts ./scripts
-COPY data ./data
+RUN mkdir -p /app/data/sqlite /app/data/chroma /app/data/docs
 COPY .env.example README.md CHANGES.md ./
 
 EXPOSE 8000

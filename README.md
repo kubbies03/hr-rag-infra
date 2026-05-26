@@ -184,6 +184,8 @@ The deployment mounts the following persistent volumes:
 
 This keeps employee data, vector embeddings, and source documents after container restarts.
 
+The GitHub infra repo does not ship runtime `data/` contents. The container image creates empty `data/sqlite`, `data/chroma`, and `data/docs` directories automatically, and Docker bind mounts will populate them on the host at runtime.
+
 ### 5. Backup and restore
 
 Create a backup:
