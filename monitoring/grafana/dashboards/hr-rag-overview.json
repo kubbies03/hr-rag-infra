@@ -158,13 +158,13 @@
       "targets": [
         {
           "editorMode": "code",
-          "expr": "max(container_last_seen{container_label_com_docker_compose_service=\"nginx\"} > bool 0)",
-          "legendFormat": "Nginx",
+          "expr": "max(up{job=\"cadvisor\"})",
+          "legendFormat": "cAdvisor",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "Nginx",
+      "title": "cAdvisor",
       "type": "stat"
     },
     {
@@ -304,13 +304,13 @@
       "targets": [
         {
           "editorMode": "code",
-          "expr": "max(container_last_seen{container_label_com_docker_compose_service=\"grafana\"} > bool 0)",
-          "legendFormat": "Grafana",
+          "expr": "max(up{job=\"node-exporter\"})",
+          "legendFormat": "node-exporter",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "Grafana",
+      "title": "node-exporter",
       "type": "stat"
     },
     {
@@ -786,11 +786,26 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "continuous-GrYlRd"
+            "mode": "thresholds"
           },
-          "decimals": 2,
-          "min": 0,
-          "unit": "percent"
+          "decimals": 3,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "orange",
+                "value": 0.2
+              },
+              {
+                "color": "red",
+                "value": 0.5
+              }
+            ]
+          },
+          "unit": "percentunit"
         },
         "overrides": []
       },
@@ -802,11 +817,9 @@
       },
       "id": 12,
       "options": {
-        "displayMode": "gradient",
-        "minVizHeight": 10,
-        "minVizWidth": 0,
-        "namePlacement": "left",
-        "orientation": "horizontal",
+        "minVizHeight": 75,
+        "minVizWidth": 75,
+        "orientation": "auto",
         "reduceOptions": {
           "calcs": [
             "lastNotNull"
@@ -814,22 +827,22 @@
           "fields": "",
           "values": false
         },
-        "showUnfilled": true,
-        "sizing": "manual",
-        "valueMode": "color"
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "sizing": "auto"
       },
       "pluginVersion": "11.2.0",
       "targets": [
         {
           "editorMode": "code",
-          "expr": "100 * sum by (container_label_com_docker_compose_service) (rate(container_cpu_usage_seconds_total{container_label_com_docker_compose_service=~\"rag-api|nginx|prometheus|grafana\"}[5m]))",
-          "legendFormat": "{{container_label_com_docker_compose_service}}",
+          "expr": "rate(container_cpu_usage_seconds_total{id=\"/system.slice/docker.service\",cpu=\"total\"}[5m])",
+          "legendFormat": "docker.service cpu",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "CPU per Container",
-      "type": "bargauge"
+      "title": "Docker Service CPU",
+      "type": "gauge"
     },
     {
       "datasource": {
@@ -839,11 +852,26 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "continuous-BlYlRd"
+            "mode": "thresholds"
           },
-          "decimals": 2,
-          "min": 0,
-          "unit": "decmbytes"
+          "decimals": 1,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "orange",
+                "value": 50000000
+              },
+              {
+                "color": "red",
+                "value": 150000000
+              }
+            ]
+          },
+          "unit": "bytes"
         },
         "overrides": []
       },
@@ -855,11 +883,9 @@
       },
       "id": 13,
       "options": {
-        "displayMode": "gradient",
-        "minVizHeight": 10,
-        "minVizWidth": 0,
-        "namePlacement": "left",
-        "orientation": "horizontal",
+        "minVizHeight": 75,
+        "minVizWidth": 75,
+        "orientation": "auto",
         "reduceOptions": {
           "calcs": [
             "lastNotNull"
@@ -867,22 +893,22 @@
           "fields": "",
           "values": false
         },
-        "showUnfilled": true,
-        "sizing": "manual",
-        "valueMode": "color"
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "sizing": "auto"
       },
       "pluginVersion": "11.2.0",
       "targets": [
         {
           "editorMode": "code",
-          "expr": "sum by (container_label_com_docker_compose_service) (container_memory_working_set_bytes{container_label_com_docker_compose_service=~\"rag-api|nginx|prometheus|grafana\"})",
-          "legendFormat": "{{container_label_com_docker_compose_service}}",
+          "expr": "container_memory_working_set_bytes{id=\"/system.slice/docker.service\"}",
+          "legendFormat": "docker.service memory",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "RAM per Container",
-      "type": "bargauge"
+      "title": "Docker Service Memory",
+      "type": "gauge"
     }
   ],
   "refresh": "15s",
@@ -905,6 +931,6 @@
   "timezone": "",
   "title": "HR RAG Overview",
   "uid": "hr-rag-overview",
-  "version": 2,
+  "version": 3,
   "weekStart": ""
 }
