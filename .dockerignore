@@ -1,0 +1,16 @@
+.git
+.idea
+.vscode
+.claude
+venv
+.venv
+__pycache__
+*.pyc
+*.pyo
+*.log
+.env
+firebase-service-account.json
+docs/
+tests/
+backups/
+

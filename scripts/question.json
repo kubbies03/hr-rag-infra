@@ -1,0 +1,257 @@
+[
+  {
+    "category": "IN_SCOPE",
+    "question": "Quy trình xin nghỉ phép gồm những bước nào?",
+    "answer": "Nhân viên kiểm tra số ngày phép, tạo đơn trên hệ thống, gửi quản lý phê duyệt, HR kiểm tra và hệ thống cập nhật kết quả."
+  },
+  {
+    "category": "IN_SCOPE",
+    "question": "Nhân viên cần cung cấp thông tin gì khi xin nghỉ?",
+    "answer": "Loại nghỉ, thời gian, số ngày, lý do, phương án bàn giao và giấy tờ nếu cần."
+  },
+  {
+    "category": "IN_SCOPE",
+    "question": "SLA xử lý đơn nghỉ của quản lý là bao lâu?",
+    "answer": "Trong vòng 24 giờ làm việc đối với đơn nghỉ thông thường."
+  },
+  {
+    "category": "IN_SCOPE",
+    "question": "Khi nghỉ ốm từ 2 ngày trở lên cần gì?",
+    "answer": "Có thể phải cung cấp giấy xác nhận y tế."
+  },
+  {
+    "category": "IN_SCOPE",
+    "question": "Quên check-in thì xử lý như thế nào?",
+    "answer": "Gửi yêu cầu điều chỉnh trên hệ thống và cần quản lý xác nhận."
+  },
+  {
+    "category": "IN_SCOPE",
+    "question": "Điều kiện để OT hợp lệ là gì?",
+    "answer": "Có công việc thực tế, được phê duyệt trước và có kết quả đầu ra."
+  },
+  {
+    "category": "IN_SCOPE",
+    "question": "Khi nào OT không được công nhận?",
+    "answer": "Không có phê duyệt, không có bằng chứng công việc hoặc chỉ online không làm việc."
+  },
+  {
+    "category": "IN_SCOPE",
+    "question": "Onboarding gồm những giai đoạn nào?",
+    "answer": "Trước ngày nhận việc, ngày đầu tiên, tuần đầu và tháng đầu tiên."
+  },
+  {
+    "category": "IN_SCOPE",
+    "question": "Offboarding cần bàn giao những gì?",
+    "answer": "Công việc, tài liệu, thiết bị, tài khoản và quyền truy cập."
+  },
+  {
+    "category": "IN_SCOPE",
+    "question": "Quy trình đề xuất tuyển dụng bắt đầu từ đâu?",
+    "answer": "Trưởng bộ phận đề xuất nhu cầu tuyển dụng với thông tin vị trí, số lượng, lý do và ngân sách."
+  },
+
+  {
+    "category": "IN_SCOPE",
+    "question": "Ai chịu trách nhiệm kiểm tra tính hợp lệ đơn nghỉ?",
+    "answer": "HR chịu trách nhiệm kiểm tra và xác nhận tính hợp lệ."
+  },
+  {
+    "category": "IN_SCOPE",
+    "question": "Nhân viên nghỉ trước khi được duyệt có hợp lệ không?",
+    "answer": "Không hợp lệ trừ khi có xác nhận tạm thời từ quản lý."
+  },
+  {
+    "category": "IN_SCOPE",
+    "question": "Quy định về gian lận chấm công là gì?",
+    "answer": "Gian lận chấm công là vi phạm nghiêm trọng."
+  },
+  {
+    "category": "IN_SCOPE",
+    "question": "Khi hệ thống chấm công lỗi diện rộng thì sao?",
+    "answer": "HR sẽ thông báo và xử lý tập trung."
+  },
+  {
+    "category": "IN_SCOPE",
+    "question": "Ai xác nhận OT sau khi hoàn thành?",
+    "answer": "Quản lý xác nhận số giờ và kết quả công việc."
+  },
+  {
+    "category": "IN_SCOPE",
+    "question": "Nhân viên mới cần làm gì trong tuần đầu?",
+    "answer": "Hoàn tất hồ sơ và tham gia đào tạo bắt buộc."
+  },
+  {
+    "category": "IN_SCOPE",
+    "question": "Ai thu hồi quyền truy cập khi nghỉ việc?",
+    "answer": "IT chịu trách nhiệm thu hồi quyền truy cập."
+  },
+  {
+    "category": "IN_SCOPE",
+    "question": "KPI được đánh giá dựa trên yếu tố nào?",
+    "answer": "Output, Quality và Behavior."
+  },
+  {
+    "category": "IN_SCOPE",
+    "question": "Điều kiện đề xuất tăng lương là gì?",
+    "answer": "Đạt KPI, không vi phạm kỷ luật và đủ thời gian xét."
+  },
+  {
+    "category": "IN_SCOPE",
+    "question": "Ai tổng hợp kết quả KPI?",
+    "answer": "HR tổng hợp và khóa dữ liệu."
+  },
+
+  {
+    "category": "IN_SCOPE",
+    "question": "Khiếu nại nội bộ được gửi qua đâu?",
+    "answer": "Qua email, hệ thống hoặc biểu mẫu."
+  },
+  {
+    "category": "IN_SCOPE",
+    "question": "Nguyên tắc xử lý khiếu nại là gì?",
+    "answer": "Bảo mật, không trả đũa và dựa trên bằng chứng."
+  },
+  {
+    "category": "IN_SCOPE",
+    "question": "Ai cấp phát thiết bị cho nhân viên?",
+    "answer": "IT và hành chính thực hiện cấp phát."
+  },
+  {
+    "category": "IN_SCOPE",
+    "question": "Khi nào thu hồi thiết bị?",
+    "answer": "Khi nghỉ việc, điều chuyển hoặc vi phạm."
+  },
+  {
+    "category": "IN_SCOPE",
+    "question": "Ai phê duyệt tuyển dụng?",
+    "answer": "Cấp có thẩm quyền sau khi HR kiểm tra."
+  },
+  {
+    "category": "IN_SCOPE",
+    "question": "Nhân viên cần làm gì khi nghỉ gấp?",
+    "answer": "Thông báo ngay cho quản lý và bổ sung đơn sau."
+  },
+  {
+    "category": "IN_SCOPE",
+    "question": "Khi hết phép năm xử lý thế nào?",
+    "answer": "Chuyển sang nghỉ không lương hoặc xét ngoại lệ."
+  },
+  {
+    "category": "IN_SCOPE",
+    "question": "Ai chịu trách nhiệm xác nhận công việc hằng ngày?",
+    "answer": "Quản lý trực tiếp chịu trách nhiệm xác nhận."
+  },
+  {
+    "category": "IN_SCOPE",
+    "question": "SOP yêu cầu gì về lưu vết?",
+    "answer": "Tất cả quy trình phải thực hiện trên hệ thống có lưu vết."
+  },
+  {
+    "category": "IN_SCOPE",
+    "question": "Người lao động có trách nhiệm gì?",
+    "answer": "Cung cấp thông tin trung thực và đúng hạn."
+  },
+
+  {
+    "category": "HR",
+    "question": "HR đóng vai trò gì trong quy trình nghỉ phép?",
+    "answer": "Kiểm tra tính hợp lệ, cập nhật hồ sơ và điều phối chính sách."
+  },
+  {
+    "category": "HR",
+    "question": "HR có trách nhiệm gì trong KPI?",
+    "answer": "Tổng hợp dữ liệu và chuyển kết quả sang thưởng, tăng lương."
+  },
+  {
+    "category": "HR",
+    "question": "HR xử lý khiếu nại như thế nào?",
+    "answer": "Tiếp nhận, phân loại, thu thập thông tin và đưa ra kết luận."
+  },
+  {
+    "category": "HR",
+    "question": "HR tham gia onboarding ra sao?",
+    "answer": "Giới thiệu công ty, chính sách và hỗ trợ nhân viên mới."
+  },
+  {
+    "category": "HR",
+    "question": "HR kiểm tra gì trong OT?",
+    "answer": "Tính hợp lệ và tổng hợp để thanh toán."
+  },
+  {
+    "category": "HR",
+    "question": "HR xử lý khi nhân viên hết phép?",
+    "answer": "Chuyển sang nghỉ không lương hoặc yêu cầu xác nhận ngoại lệ."
+  },
+  {
+    "category": "HR",
+    "question": "HR làm gì khi offboarding?",
+    "answer": "Đối soát công nợ, ngày công và hoàn tất thủ tục nghỉ việc."
+  },
+  {
+    "category": "HR",
+    "question": "HR có vai trò gì trong tuyển dụng?",
+    "answer": "Kiểm tra headcount và triển khai sourcing."
+  },
+  {
+    "category": "HR",
+    "question": "HR có trách nhiệm gì với dữ liệu nhân sự?",
+    "answer": "Cập nhật và đảm bảo dữ liệu chính xác."
+  },
+  {
+    "category": "HR",
+    "question": "HR xử lý ngoại lệ như thế nào?",
+    "answer": "Xác nhận lý do và trình phê duyệt phù hợp."
+  },
+
+
+  {
+    "category": "OUT_OF_SCOPE",
+    "question": "Giá vàng hôm nay bao nhiêu?",
+    "answer": "Tôi không cung cấp dữ liệu thị trường theo thời gian thực."
+  },
+  {
+    "category": "OUT_OF_SCOPE",
+    "question": "Ai là tổng thống Mỹ?",
+    "answer": "Câu hỏi này không thuộc phạm vi dữ liệu nội bộ."
+  },
+  {
+    "category": "OUT_OF_SCOPE",
+    "question": "Cách nấu ăn ngon?",
+    "answer": "Không thuộc phạm vi hỗ trợ của hệ thống HR."
+  },
+  {
+    "category": "OUT_OF_SCOPE",
+    "question": "Top phim hay nhất?",
+    "answer": "Câu hỏi không liên quan đến dữ liệu công ty."
+  },
+  {
+    "category": "OUT_OF_SCOPE",
+    "question": "Cách học AI?",
+    "answer": "Tôi chỉ hỗ trợ thông tin nội bộ doanh nghiệp."
+  },
+  {
+    "category": "OUT_OF_SCOPE",
+    "question": "Dân số Việt Nam là bao nhiêu?",
+    "answer": "Không nằm trong phạm vi dữ liệu hệ thống."
+  },
+  {
+    "category": "OUT_OF_SCOPE",
+    "question": "Thời tiết hôm nay?",
+    "answer": "Tôi không truy cập dữ liệu thời tiết realtime."
+  },
+  {
+    "category": "OUT_OF_SCOPE",
+    "question": "Cách đầu tư chứng khoán?",
+    "answer": "Không thuộc phạm vi chính sách nội bộ."
+  },
+  {
+    "category": "OUT_OF_SCOPE",
+    "question": "Cách giảm cân?",
+    "answer": "Không liên quan đến hệ thống HR."
+  },
+  {
+    "category": "OUT_OF_SCOPE",
+    "question": "Thủ đô Nhật Bản là gì?",
+    "answer": "Câu hỏi ngoài phạm vi dữ liệu doanh nghiệp."
+  }
+]
