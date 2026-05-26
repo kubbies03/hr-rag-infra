@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>HR RAG Demo Chat</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <section class="hero">
+        <p class="eyebrow">Live Demo</p>
+        <h1>HR RAG Chat</h1>
+        <p class="subtitle">
+          Ask about leave policy, procedures, or employee status through the deployed
+          FastAPI service.
+        </p>
+      </section>
+
+      <section class="panel controls">
+        <label>
+          API Key
+          <input id="apiKey" type="text" value="demo_employee_001" />
+        </label>
+        <label>
+          Session ID
+          <input id="sessionId" type="text" value="demo-ui-001" />
+        </label>
+        <button id="clearBtn" type="button" class="ghost">Clear</button>
+      </section>
+
+      <section class="panel chat-panel">
+        <div id="messages" class="messages" aria-live="polite"></div>
+
+        <form id="chatForm" class="composer">
+          <textarea
+            id="message"
+            rows="3"
+            maxlength="2000"
+            placeholder="Ask something like: What is the annual leave policy?"
+            required
+          ></textarea>
+          <div class="composer-row">
+            <span id="status" class="status">Ready</span>
+            <button id="sendBtn" type="submit">Send</button>
+          </div>
+        </form>
+      </section>
+    </main>
+
+    <template id="messageTemplate">
+      <article class="bubble">
+        <header class="bubble-head">
+          <strong class="role"></strong>
+          <span class="meta"></span>
+        </header>
+        <div class="content"></div>
+        <ul class="sources"></ul>
+      </article>
+    </template>
+
+    <script src="./app.js"></script>
+  </body>
+</html>

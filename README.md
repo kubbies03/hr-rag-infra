@@ -183,6 +183,16 @@ curl http://localhost/docs
 
 Nginx listens on port `80` and proxies traffic to the FastAPI container on port `8000`.
 
+### 3b. Open the demo chat UI
+
+The repo now includes a lightweight browser chat client served by Nginx:
+
+```text
+http://localhost/demo/
+```
+
+It calls `POST /api/chat` through the reverse proxy, so you can demo the deployed service without Swagger or Postman.
+
 ### 3a. Ingest documents after first deploy
 
 Copy your `.pdf`, `.docx`, or `.txt` files into `data/docs/`, then ingest them:
@@ -302,6 +312,27 @@ To generate API traffic for the dashboard during a demo:
 ```bash
 ./scripts/seed_demo_traffic.sh
 ```
+
+## Public Demo with ngrok
+
+If you want to share the running demo publicly without exposing your VM directly, tunnel Nginx with ngrok:
+
+```bash
+ngrok config add-authtoken YOUR_NGROK_AUTHTOKEN
+ngrok http 80
+```
+
+Then open the generated public URL and append `/demo/`:
+
+```text
+https://your-ngrok-url.ngrok.app/demo/
+```
+
+This gives you:
+
+- `/demo/` for the browser chat UI
+- `/health` for liveness checks
+- `/api/chat` for live API testing
 
 ### 7. Telemetry
 
