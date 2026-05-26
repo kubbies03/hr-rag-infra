@@ -17,9 +17,8 @@ RUN pip install --upgrade pip \
 COPY app ./app
 COPY scripts ./scripts
 COPY data ./data
-COPY .env.example README.md run.txt CHANGES.md ./
+COPY .env.example README.md CHANGES.md ./
 
 EXPOSE 8000
 
 CMD ["python", "-m", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
-
