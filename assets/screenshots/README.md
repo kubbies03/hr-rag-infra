@@ -1,21 +1,16 @@
 # Demo Screenshot Checklist
 
-Capture these artifacts after a successful Ubuntu deployment:
+Use this folder for the screenshots referenced by the main README after a successful Ubuntu deployment.
 
-1. `docker compose ps`
-2. `GET /health` response
-3. `POST /api/chat` response with sources
-4. Grafana `HR RAG Overview` dashboard
-5. Prometheus targets page
-6. Generated backup archive in `backups/`
-7. Nginx reverse proxy serving `/health`
+Already captured:
 
-Suggested filenames:
+1. `01-docker-compose-ps.png` - full stack status from `docker compose ps`
+2. `02-chat-response.png` - live browser demo calling the deployed service
+3. `03-grafana-dashboard.png` - Grafana `HR RAG Overview` dashboard
 
-- `01-docker-compose-ps.png`
-- `02-health-response.png`
-- `03-chat-response.png`
-- `04-grafana-dashboard.png`
-- `05-prometheus-targets.png`
-- `06-backup-archive.png`
-- `07-nginx-health.png`
+Recommended remaining captures:
+
+4. `04-swagger-ui-docs.png` - Swagger UI at `/docs`
+5. `05-nginx-health.png` - reverse proxy health check through `/health`
+6. `06-backup-archive.png` - generated archive in `backups/`
+7. `07-architecture-diagram.png` - system or deployment diagram for the repo overview

@@ -1,66 +1,151 @@
-# Android HR Chatbot — RAG System
+# System Engineer Lab - Dockerized HR Service Deployment
 
-Backend server for an Android HR application. Handles employee status queries and internal policy questions using a hybrid RAG pipeline, serving JSON responses to the Android client via API.
+This repository focuses on service deployment and operations more than AI experimentation. It packages an existing HR question-answering backend into a Linux-ready stack with Docker Compose, Nginx reverse proxy, persistent storage, backup and restore, monitoring, and a browser demo that can be shared through ngrok.
 
-## Overview
+1. Project Overview
+2. System Architecture
+3. Deployment Architecture
+4. Tech Stack
+5. Folder Structure
+6. Environment Variables
+7. How to Run
+8. API Testing
+9. Data Persistence
+10. Backup & Restore
+11. Monitoring
+12. Troubleshooting
+13. Future Improvements
 
-- Employee status questions are answered from live HR data.
-- Policy and procedure questions are answered from ingested internal documents.
-- Out-of-scope questions are politely declined.
+## 1. Project Overview
 
-The Android app authenticates users via Firebase Auth and sends requests to this server with a Bearer token. The server uses a three-stage intent classifier, vector retrieval, optional reranking, and Gemini-based answer generation.
+- Deployable on Linux with Docker Compose
+- Reverse proxied through Nginx on port `80`
+- Persistent storage for SQLite, ChromaDB, and uploaded documents
+- Backup and restore workflow for core runtime data
+- Health check and metrics endpoints for service readiness
+- Monitoring with Prometheus, Grafana, Node Exporter, and cAdvisor
+- Public demo support through a lightweight browser chat UI and ngrok
 
-## Architecture
+Service scope:
+
+- Employee status questions are answered from HR data.
+- Policy and procedure questions are answered from indexed internal documents.
+- Out-of-scope questions are declined through the application layer.
+
+From a System Engineer perspective, the main value of this repo is the deployable runtime package: reverse proxy, container orchestration, mounted stateful directories, health verification, observability, and simple operational runbooks.
+
+## 2. System Architecture
 
 ```mermaid
 flowchart TD
     A[Android App / Browser / Swagger] --> B[Nginx Reverse Proxy]
-    B --> C[FastAPI HR RAG Backend]
+    B --> C[FastAPI Service]
     C --> D[SQLite Database]
     C --> E[ChromaDB Vector Store]
-    C --> F[Gemini API]
+    C --> F[External AI API]
 ```
 
-## Tech Stack
+## 3. Deployment Architecture
+
+```text
+Client / Browser / Android App
+            |
+            v
+      Nginx Reverse Proxy
+            |
+            v
+        FastAPI Service
+            |
+            v
+  SQLite + ChromaDB + Docs Volumes
+            |
+            v
+      External AI API
+```
+
+## 4. Tech Stack
 
 | Layer | Technology |
 |---|---|
+| Platform | Linux, Docker, Docker Compose |
+| Reverse proxy | Nginx |
 | API | FastAPI, Uvicorn |
-| LLM | Google Gemini 2.5 Flash |
-| Embeddings | Gemini Embedding API |
-| Reranker | Optional Gemini reranker |
+| External inference | Google Gemini API |
 | Vector store | ChromaDB |
 | Database | SQLite, SQLAlchemy |
 | Authentication | Firebase Auth, demo API key |
 | Notifications | Firebase Cloud Messaging |
+| Monitoring | Prometheus, Grafana, Node Exporter, cAdvisor |
+| Scripting | Bash, PowerShell |
 
-## Features
+Infrastructure highlights:
 
-- Hybrid intent classification with embedding k-NN, regex, and LLM fallback
-- Reranked RAG for policy questions
+- Dockerized backend with health checks
+- Compose-managed multi-service deployment
+- Nginx reverse proxy in front of the backend
+- Persistent data mounts for SQLite, ChromaDB, and source documents
+- Backup and restore scripts for runtime data
+- Ubuntu monitoring target with Prometheus, Grafana, Node Exporter, and cAdvisor
+- Browser-based demo UI served by Nginx
+- ngrok-ready public demo flow
+
+Application highlights:
+
+- HTTP API for HR data and policy lookup
 - Role-based document access filtering
-- SQLite fallback for local development
+- Document ingest pipeline backed by ChromaDB
 - Conversation history persistence
 - Request logging with latency tracking
+- Demo and production auth modes
 
-## Requirements
+Requirements:
 
 - Python 3.11+
-- Google Gemini API key
-- Firebase service account, optional for production auth and Firestore
 - Docker + Docker Compose for Linux-style deployment
+- Google Gemini API key for application responses
+- Firebase service account, optional for production auth and Firestore
 
-## Environment Variables
+## 5. Folder Structure
+
+```text
+hr-rag-infra/
+|-- app/
+|   |-- api/
+|   |-- core/
+|   |-- data/
+|   |-- db/
+|   |-- prompts/
+|   |-- services/
+|   `-- main.py
+|-- assets/
+|   `-- screenshots/
+|-- data/
+|   |-- docs/
+|   |-- chroma/
+|   `-- sqlite/
+|-- frontend/
+|-- monitoring/
+|-- nginx/
+|-- scripts/
+|-- .env.example
+|-- docker-compose.yml
+|-- docker-compose.ubuntu-monitoring.yml
+|-- Dockerfile
+|-- README.md
+`-- requirements.txt
+```
+
+## 6. Environment Variables
 
 | Variable | Description | Default |
 |---|---|---|
-| `GOOGLE_API_KEY` | Gemini API key | required |
-| `GEMINI_EMBEDDING_MODEL` | Gemini embedding model | `models/gemini-embedding-001` |
+| `GOOGLE_API_KEY` | External AI API key used by the application layer | required |
+| `GEMINI_EMBEDDING_MODEL` | Embedding backend model name | `models/gemini-embedding-001` |
 | `GEMINI_EMBEDDING_BATCH_SIZE` | Batch size for document embedding requests | `100` |
-| `GEMINI_EMBEDDING_TIMEOUT` | Timeout for Gemini embedding calls, seconds | `30` |
-| `RERANKER_PROVIDER` | Reranker backend | `gemini` |
+| `GEMINI_EMBEDDING_TIMEOUT` | Timeout for embedding calls, seconds | `30` |
+| `RERANKER_PROVIDER` | Optional reranker backend | `gemini` |
 | `USE_RERANKER` | Enable reranking | `false` |
-| `RERANKER_TIMEOUT` | Timeout for Gemini reranking calls, seconds | `20` |
+| `RERANKER_TIMEOUT` | Timeout for reranking calls, seconds | `20` |
 | `RERANKER_MAX_DOC_CHARS` | Max chars per candidate chunk sent to reranker | `1200` |
 | `RERANKER_MIN_SCORE` | Minimum reranker score | `0.3` |
 | `DATABASE_URL` | SQLite connection string | `sqlite:///data/sqlite/hr.db` |
@@ -69,11 +154,9 @@ flowchart TD
 | `FIREBASE_PROJECT_ID` | Firebase project ID | required for production |
 | `FIREBASE_CREDENTIALS_PATH` | Path to service account JSON | `firebase-service-account.json` |
 
-## Authentication
+Authentication:
 
-### Demo mode
-
-Pass one of the demo keys in the `X-API-Key` header.
+Demo mode uses the `X-API-Key` header.
 
 | Key | Role |
 |---|---|
@@ -82,15 +165,85 @@ Pass one of the demo keys in the `X-API-Key` header.
 | `demo_manager_001` | manager |
 | `demo_admin_001` | admin |
 
-### Production mode
-
-The Android app obtains a Firebase ID token after login and attaches it to every request:
+Production mode uses a Firebase ID token:
 
 ```http
 Authorization: Bearer <firebase_id_token>
 ```
 
-## API Reference
+## 7. How to Run
+
+This repo includes the deploy package described in `deploy.md`:
+
+- `Dockerfile`
+- `docker-compose.yml`
+- `nginx/nginx.conf`
+- `scripts/backup.sh`
+- `scripts/restore.sh`
+
+### 7.1 Prepare environment
+
+Create a `.env` file in the project root:
+
+```bash
+cp .env.example .env
+```
+
+Then fill in at least:
+
+```text
+GOOGLE_API_KEY=...
+FIREBASE_PROJECT_ID=...
+FIREBASE_CREDENTIALS_PATH=firebase-service-account.json
+```
+
+If you do not use Firebase yet, keep the API key and document volumes ready for demo mode.
+
+### 7.2 Build and start
+
+```bash
+docker compose up -d --build
+docker compose ps
+```
+
+### 7.3 Test health
+
+```bash
+curl http://localhost/health
+curl http://localhost/docs
+```
+
+Nginx listens on port `80` and proxies traffic to the FastAPI container on port `8000`.
+
+### 7.4 Open the demo chat UI
+
+The repo includes a lightweight browser chat client served by Nginx:
+
+```text
+http://localhost/demo/
+```
+
+It calls `POST /api/chat` through the reverse proxy, so you can demo the deployed service without Swagger or Postman.
+
+### 7.5 Ingest documents after first deploy
+
+Copy your `.pdf`, `.docx`, or `.txt` files into `data/docs/`, then ingest them:
+
+```bash
+docker compose exec rag-api python -c "from app.services.ingest_service import ingest_directory; import json; print(json.dumps(ingest_directory(), ensure_ascii=False, indent=2))"
+curl http://localhost/health
+```
+
+For a public API test through Nginx:
+
+```bash
+curl -X POST "http://localhost/api/chat" \
+  -H "Content-Type: application/json" \
+  -H "X-API-Key: demo_employee_001" \
+  -d '{"message":"What is the annual leave policy?","session_id":"deploy-test-001"}'
+```
+
+## 8. API Testing
 
 ### Chat
 
@@ -121,97 +274,7 @@ Content-Type: application/json
 
 Legacy aliases `/api/docs/ingest`, `/api/docs/ingest-all`, and `/api/docs/stats` are also supported for backward compatibility.
 
-## Deployment Architecture
-
-```text
-Client / Browser / Android App
-            |
-            v
-      Nginx Reverse Proxy
-            |
-            v
-       FastAPI RAG Backend
-            |
-            v
-  SQLite + ChromaDB + Docs Volumes
-            |
-            v
-         Gemini API
-```
-
-## Docker Deployment
-
-This repo now includes the minimum deploy package described in `deploy.md`:
-
-- `Dockerfile`
-- `docker-compose.yml`
-- `nginx/nginx.conf`
-- `scripts/backup.sh`
-- `scripts/restore.sh`
-
-### 1. Prepare environment
-
-Create a `.env` file in the project root before starting containers.
-
-```bash
-cp .env.example .env
-```
-
-Then fill in at least:
-
-```text
-GOOGLE_API_KEY=...
-FIREBASE_PROJECT_ID=...
-FIREBASE_CREDENTIALS_PATH=firebase-service-account.json
-```
-
-If you do not use Firebase in deployment yet, keep the API key and document volumes ready for demo mode.
-
-### 2. Build and start
-
-```bash
-docker compose up -d --build
-docker compose ps
-```
-
-### 3. Test health
-
-```bash
-curl http://localhost/health
-curl http://localhost/docs
-```
-
-Nginx listens on port `80` and proxies traffic to the FastAPI container on port `8000`.
-
-### 3b. Open the demo chat UI
-
-The repo now includes a lightweight browser chat client served by Nginx:
-
-```text
-http://localhost/demo/
-```
-
-It calls `POST /api/chat` through the reverse proxy, so you can demo the deployed service without Swagger or Postman.
-
-### 3a. Ingest documents after first deploy
-
-Copy your `.pdf`, `.docx`, or `.txt` files into `data/docs/`, then ingest them:
-
-```bash
-docker compose exec rag-api python -c "from app.services.ingest_service import ingest_directory; import json; print(json.dumps(ingest_directory(), ensure_ascii=False, indent=2))"
-curl http://localhost/health
-```
-
-For a public API test through Nginx:
-
-```bash
-curl -X POST "http://localhost/api/chat" \
-  -H "Content-Type: application/json" \
-  -H "X-API-Key: demo_employee_001" \
-  -d '{"message":"What is the annual leave policy?","session_id":"deploy-test-001"}'
-```
-
-### 4. Persistent storage
+## 9. Data Persistence
 
 The deployment mounts the following persistent volumes:
 
@@ -219,11 +282,11 @@ The deployment mounts the following persistent volumes:
 - `./data/chroma:/app/data/chroma`
 - `./data/docs:/app/data/docs`
 
-This keeps employee data, vector embeddings, and source documents after container restarts.
+This keeps employee data, indexed document data, and source documents after container restarts.
 
 The GitHub infra repo does not ship runtime `data/` contents. The container image creates empty `data/sqlite`, `data/chroma`, and `data/docs` directories automatically, and Docker bind mounts will populate them on the host at runtime.
 
-### 5. Backup and restore
+## 10. Backup & Restore
 
 Create a backup:
 
@@ -249,7 +312,7 @@ On Windows PowerShell:
 .\scripts\restore.ps1 .\backups\hr-rag-backup-YYYY-MM-DD-HHMM.tar.gz
 ```
 
-### 6. Monitoring
+## 11. Monitoring
 
 The Compose stack also includes:
 
@@ -271,8 +334,6 @@ Prometheus scrapes:
 
 - `rag-api:8000/metrics`
 - `prometheus:9090`
-
-The default config stays Windows-safe and demo-friendly.
 
 On Windows or Docker Desktop, run the default stack:
 
@@ -298,13 +359,6 @@ The Ubuntu monitoring override adds:
 - `cadvisor:8080`
 - `monitoring/prometheus.linux.yml`
 
-That Linux Prometheus config scrapes:
-
-- `rag-api:8000/metrics`
-- `prometheus:9090`
-- `node-exporter:9100`
-- `cadvisor:8080`
-
 Grafana also provisions the `HR RAG Overview` dashboard automatically from `monitoring/grafana/dashboards/hr-rag-overview.json`.
 
 To generate API traffic for the dashboard during a demo:
@@ -313,83 +367,25 @@ To generate API traffic for the dashboard during a demo:
 ./scripts/seed_demo_traffic.sh
 ```
 
-## Public Demo with ngrok
-
-If you want to share the running demo publicly without exposing your VM directly, tunnel Nginx with ngrok:
+Public demo with ngrok:
 
 ```bash
 ngrok config add-authtoken YOUR_NGROK_AUTHTOKEN
 ngrok http 80
 ```
 
-Then open the generated public URL and append `/demo/`:
+Then open:
 
 ```text
 https://your-ngrok-url.ngrok.app/demo/
 ```
 
-This gives you:
+Telemetry notes:
 
-- `/demo/` for the browser chat UI
-- `/health` for liveness checks
-- `/api/chat` for live API testing
+- `ANONYMIZED_TELEMETRY=False`
+- Chroma telemetry is disabled to keep logs cleaner during deploy verification and demos.
 
-### 7. Telemetry
-
-Chroma telemetry is disabled in both configuration and client initialization:
-
-```text
-ANONYMIZED_TELEMETRY=False
-```
-
-The client is also wired to a local no-op telemetry implementation so startup does not emit Chroma telemetry noise during demos or deploy verification.
-
-This keeps deployment logs cleaner and avoids unnecessary telemetry noise in demos.
-
-## Extending Intent Classification
-
-Edit `app/data/intent_examples.json` and restart the server to add new phrasings or new intent groups.
-
-## Gemini Embedding Migration
-
-This copy of the project uses Gemini embeddings instead of a local HuggingFace embedding model.
-
-- Linux deploy no longer needs a separate local embedding model for retrieval.
-- Reranking is disabled by default so Linux deploy only needs FastAPI + ChromaDB + Gemini API access.
-- If you want higher retrieval precision later, enable `USE_RERANKER=true` to use the Gemini reranker.
-- Existing Chroma vectors generated by the old embedding model are not compatible with Gemini query vectors.
-- Re-ingest the documents in `data/docs/` before testing retrieval on this copy.
-
-## Project Structure
-
-```text
-hr-rag-infra/
-├── app/
-│   ├── api/
-│   ├── core/
-│   ├── data/
-│   ├── db/
-│   ├── prompts/
-│   ├── services/
-│   └── main.py
-├── assets/
-│   └── screenshots/
-├── data/
-│   ├── docs/
-│   ├── chroma/
-│   └── sqlite/
-├── monitoring/
-├── nginx/
-├── scripts/
-├── .env.example
-├── docker-compose.yml
-├── docker-compose.ubuntu-monitoring.yml
-├── Dockerfile
-├── README.md
-└── requirements.txt
-```
-
-## Troubleshooting
+## 12. Troubleshooting
 
 ### `502 Bad Gateway` from Nginx
 
@@ -401,7 +397,7 @@ docker compose restart nginx
 
 ### `chromadb: ok (0 chunks)` in `/health`
 
-The service is running, but no documents were indexed yet. Copy files into `data/docs/` and run the ingest command in section `3a`.
+The service is running, but no documents were indexed yet. Copy files into `data/docs/` and run the ingest command from section `7.5`.
 
 ### Grafana shows `No data`
 
@@ -427,22 +423,42 @@ sudo usermod -aG docker $USER
 newgrp docker
 ```
 
-## Demo Evidence
+### Service notes
 
-Use [assets/screenshots/README.md](assets/screenshots/README.md) as the checklist for GitHub and CV screenshots after deployment.
+- External AI dependencies were moved to API-backed providers to keep Linux deployment lighter.
+- Reranking is disabled by default so the base stack only needs FastAPI, SQLite, ChromaDB, and outbound API access.
+- If you change embedding settings, re-ingest the files in `data/docs/` before validating retrieval again.
 
-## Known Limitations
-
-- In-process cache is not shared across multiple workers
-- No request throttling on the chat endpoint
-- CORS currently allows all origins
-- Gemini latency varies with upstream load
-- Legacy `.doc` files still require Windows COM automation
-
-## Future Improvements
+## 13. Future Improvements
 
 - Add HTTPS termination with Let's Encrypt or Cloudflare Tunnel
 - Add alerting rules for uptime, disk pressure, and latency spikes
 - Export structured logs to Loki or ELK
 - Replace demo auth with production Firebase-first flows in deployment docs
 - Add CI to validate Compose, Prometheus, and Grafana provisioning on every push
+
+## Demo Evidence
+
+Use [assets/screenshots/README.md](assets/screenshots/README.md) as the checklist for GitHub and CV screenshots after deployment.
+
+## Demo Screenshots
+
+### Docker Compose
+
+![Docker Compose PS](assets/screenshots/01-docker-compose-ps.png)
+
+### Chat Response
+
+![Chat Response](assets/screenshots/02-chat-response.png)
+
+### Grafana Dashboard
+
+![Grafana Dashboard](assets/screenshots/03-grafana-dashboard.png)
+
+## Known Limitations
+
+- In-process cache is not shared across multiple workers
+- No request throttling on the chat endpoint
+- CORS currently allows all origins
+- External AI API latency varies with upstream load
+- Legacy `.doc` files still require Windows COM automation
