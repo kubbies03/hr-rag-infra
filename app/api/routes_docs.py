@@ -17,6 +17,7 @@ router = APIRouter()
 
 
 @router.post("/api/documents/ingest")
+@router.post("/api/docs/ingest")
 async def ingest_document(
     file: UploadFile = File(...),
     title: str = Form(default=None),
@@ -56,6 +57,7 @@ async def ingest_document(
 
 
 @router.post("/api/documents/ingest-all")
+@router.post("/api/docs/ingest-all")
 async def ingest_all_documents(
     user: dict = Depends(get_current_user),
 ):
@@ -68,6 +70,7 @@ async def ingest_all_documents(
 
 
 @router.get("/api/documents/stats")
+@router.get("/api/docs/stats")
 async def document_stats(
     user: dict = Depends(get_current_user),
 ):
