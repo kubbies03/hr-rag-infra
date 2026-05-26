@@ -158,7 +158,7 @@
       "targets": [
         {
           "editorMode": "code",
-          "expr": "max(container_last_seen{name=\"hr-rag-nginx\"} > bool 0)",
+          "expr": "max(container_last_seen{container_label_com_docker_compose_service=\"nginx\"} > bool 0)",
           "legendFormat": "Nginx",
           "range": true,
           "refId": "A"
@@ -304,7 +304,7 @@
       "targets": [
         {
           "editorMode": "code",
-          "expr": "max(container_last_seen{name=\"hr-rag-grafana\"} > bool 0)",
+          "expr": "max(container_last_seen{container_label_com_docker_compose_service=\"grafana\"} > bool 0)",
           "legendFormat": "Grafana",
           "range": true,
           "refId": "A"
@@ -822,8 +822,8 @@
       "targets": [
         {
           "editorMode": "code",
-          "expr": "100 * sum by (name) (rate(container_cpu_usage_seconds_total{name=~\"hr-rag-api|hr-rag-nginx|hr-rag-prometheus|hr-rag-grafana\"}[5m]))",
-          "legendFormat": "{{name}}",
+          "expr": "100 * sum by (container_label_com_docker_compose_service) (rate(container_cpu_usage_seconds_total{container_label_com_docker_compose_service=~\"rag-api|nginx|prometheus|grafana\"}[5m]))",
+          "legendFormat": "{{container_label_com_docker_compose_service}}",
           "range": true,
           "refId": "A"
         }
@@ -875,8 +875,8 @@
       "targets": [
         {
           "editorMode": "code",
-          "expr": "sum by (name) (container_memory_working_set_bytes{name=~\"hr-rag-api|hr-rag-nginx|hr-rag-prometheus|hr-rag-grafana\"})",
-          "legendFormat": "{{name}}",
+          "expr": "sum by (container_label_com_docker_compose_service) (container_memory_working_set_bytes{container_label_com_docker_compose_service=~\"rag-api|nginx|prometheus|grafana\"})",
+          "legendFormat": "{{container_label_com_docker_compose_service}}",
           "range": true,
           "refId": "A"
         }
